@@ -18,3 +18,8 @@ ujson
 psutil
 telegram
 python-telegram-bot==13.11
+random2
+speedtest-cli
+gitpython
+wget
+heroku3

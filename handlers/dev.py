@@ -1,20 +1,19 @@
+
+from functools import wraps
 import os
 import shutil
 import sys
-import traceback
-from functools import wraps
-from os import environ, execle, path, remove
 from git import Repo
-from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
+from os import system, execle, environ
+from git.exc import InvalidGitRepositoryError
 import heroku3
-from numpy import append
+#from numpy import append
 import psutil
 from config import (
     BOT_USERNAME,
     
     HEROKU_API_KEY,
     HEROKU_APP_NAME,
-    HEROKU_URL,
     
     U_BRANCH,
     UPSTREAM_REPO,
@@ -78,61 +77,6 @@ async def botstats(_, message: Message):
 REPO_ = UPSTREAM_REPO
 BRANCH_ = U_BRANCH
 
-@Client.on_message(command("update") & filters.user(OWNER_ID))
-async def updatebot(_, message: Message):
-    msg = await message.reply_text("`Updating Module is Starting! Please Wait...`")
-    try:
-        repo = Repo()
-    except GitCommandError:
-        return await msg.edit(
-            "`Invalid Git Command!`"
-        )
-    except InvalidGitRepositoryError:
-        repo = Repo.init()
-        if "upstream" in repo.remotes:
-            origin = repo.remote("upstream")
-        else:
-            origin = repo.create_remote("upstream", REPO_)
-        origin.fetch()
-        repo.create_head(U_BRANCH, origin.refs.master)
-        repo.heads.master.set_tracking_branch(origin.refs.master)
-        repo.heads.master.checkout(True)
-    if repo.active_branch.name != U_BRANCH:
-        return await msg.edit(
-            f"Hmmm... Seems Like You Are Using Custom Branch Named `{repo.active_branch.name}`! Please Use `{U_BRANCH}` To Make This Works!"
-        )
-    try:
-        repo.create_remote("upstream", REPO_)
-    except BaseException:
-        pass
-    ups_rem = repo.remote("upstream")
-    ups_rem.fetch(U_BRANCH)
-    if not HEROKU_URL:
-        try:
-            ups_rem.pull(U_BRANCH)
-        except GitCommandError:
-            repo.git.reset("--hard", "FETCH_HEAD")
-        await run_cmd("pip3 install --no-cache-dir -r requirements.txt")
-        await msg.edit("**Successfully Updated! Restarting Now!**")
-        args = [sys.executable, "nikkimusic"]
-        execle(sys.executable, *args, environ)
-        exit()
-        return
-    else:
-        await msg.edit("`Heroku Detected!`")
-        await msg.edit("`Updating and Restarting has Started! Please wait for 5-10 Minutes!`")
-        ups_rem.fetch(U_BRANCH)
-        repo.git.reset("--hard", "FETCH_HEAD")
-        if "heroku" in repo.remotes:
-            remote = repo.remote("heroku")
-            remote.set_url(HEROKU_URL)
-        else:
-            remote = repo.create_remote("heroku", HEROKU_URL)
-        try:
-            remote.push(refspec="HEAD:refs/heads/master", force=True)
-        except BaseException as error:
-            await msg.edit(f"**Updater Error** \nTraceBack : `{error}`")
-            return repo.__del__()
 
 
 
@@ -214,6 +158,7 @@ async def restart(client: Client, message: Message, hap):
 # Set Heroku Var
 @Client.on_message(command("setvar") & filters.user(OWNER_ID))
 @_check_heroku
+
 async def setvar(client: Client, message: Message, app_):
     msg = await message.reply_text(message, "`please wait...`")
     heroku_var = app_.config()
@@ -248,3 +193,58 @@ async def delvar(client: Client, message: Message, app_):
         return
     await msg.edit(f"sucessfully deleted var `{_var}`")
     del heroku_var[_var]
+
+
+
+
+def gen_chlog(repo, diff):
+    upstream_repo_url = Repo().remotes[0].config_reader.get("url").replace(".git", "")
+    ac_br = repo.active_branch.name
+    ch_log = ""
+    tldr_log = ""
+    ch = f"<b>updates for <a href={upstream_repo_url}/tree/{ac_br}>[{ac_br}]</a>:</b>"
+    ch_tl = f"updates for {ac_br}:"
+    d_form = "%d/%m/%y || %H:%M"
+    for c in repo.iter_commits(diff):
+        ch_log += (
+            f"\n\n💬 <b>{c.count()}</b> 🗓 <b>[{c.committed_datetime.strftime(d_form)}]</b>\n<b>"
+            f"<a href={upstream_repo_url.rstrip('/')}/commit/{c}>[{c.summary}]</a></b> 👨‍💻 <code>{c.author}</code>"
+        )
+        tldr_log += f"\n\n💬 {c.count()} 🗓 [{c.committed_datetime.strftime(d_form)}]\n[{c.summary}] 👨‍💻 {c.author}"
+    if ch_log:
+        return str(ch + ch_log), str(ch_tl + tldr_log)
+    return ch_log, tldr_log
+
+
+def updater():
+    try:
+        repo = Repo()
+    except InvalidGitRepositoryError:
+        repo = Repo.init()
+        origin = repo.create_remote("upstream", UPSTREAM_REPO)
+        origin.fetch()
+        repo.create_head("master", origin.refs.master)
+        repo.heads.master.set_tracking_branch(origin.refs.master)
+        repo.heads.master.checkout(True)
+    ac_br = repo.active_branch.name
+    if "upstream" in repo.remotes:
+        ups_rem = repo.remote("upstream")
+    else:
+        ups_rem = repo.create_remote("upstream", UPSTREAM_REPO)
+    ups_rem.fetch(ac_br)
+    changelog, tl_chnglog = gen_chlog(repo, f"HEAD..upstream/{ac_br}")
+    return bool(changelog)
+
+
+@Client.on_message(command(["update", f"update@{BOT_USERNAME}"]) & ~filters.edited)
+@sudo_users_only
+async def update_bot(_, message: Message):
+    chat_id = message.chat.id
+    msg = await message.reply("❖ Checking updates...")
+    update_avail = updater()
+    if update_avail:
+        await msg.edit("✅ Update finished !\n\n• Bot restarting, back active again in 1 minutes.")
+        system("git pull -f && pip3 install --no-cache-dir -r requirements.txt")
+        execle(sys.executable, sys.executable, "main.py", environ)
+    
+    return await msg.edit(f"❖ bot is **up-to-date** with [master]({UPSTREAM_REPO}/tree/master) ❖", disable_web_page_preview=True)

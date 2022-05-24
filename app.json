@@ -60,10 +60,37 @@
       "required": false,
       "value": "ENABLE"
     },
+    "LOG_GRP": {
+      "description": "YOUR LOG GROUP ID",
+      "required": true
+    },
     "DURATION_LIMIT": {
       "description": "Max audio duration limit for downloads (minutes).",
       "required": false,
       "value": "90"
+    },
+    "OWNER_ID": {
+      "description": "BOT OWNER ID",
+      "required": true
+    },
+    "HEROKU_APP_NAME": {
+      "description": "HEROKU APP NAME.",
+      "required": true
+    },
+    "HEROKU_API_KEY": {
+      "description": "HEROKU API KEY.",
+      "required": true 
+    
+    },
+    "U_BRANCH": {
+      "description": "LEAVE AS IT IS.",
+      "required": true,
+      "value": "master"
+    },
+    "UPSTREAM_REPO": {
+      "description": "LEAVE AS IT IS.",
+      "required": true,
+      "value": "https://github.com/Dyno1433/dyno"
     }
   }
 }

@@ -1,31 +1,38 @@
 import asyncio
 
-from pyrogram import Client, filters
-from pyrogram.types import Dialog, Chat, Message
-from pyrogram.errors import UserAlreadyParticipant
+import asyncio
 
-from callsmusic.callsmusic import client as Anonymous
+from pyrogram import Client, filters
+from pyrogram.types import Message
+
+from callsmusic.callsmusic import client as USER
+from helpers.filters import command
 from config import SUDO_USERS
 
-@Client.on_message(filters.command(["broadcast", "gcast"]))
+@Client.on_message(command(["pcast"]))
 async def broadcast(_, message: Message):
-    await message.delete()
-    sent=0
-    failed=0
+    sent = 0
+    failed = 0
     if message.from_user.id not in SUDO_USERS:
         return
     else:
-        wtf = await message.reply("`sᴛᴀʀᴛɪɴɢ ʙʀᴏᴀᴅᴄᴀsᴛ​ ʙᴀʙʏ...`")
+        wtf = await message.reply("`Starting a broadcast...`")
         if not message.reply_to_message:
-            await wtf.edit("**__ʀᴇᴘʟʏ ᴛᴏ ᴀ ᴍᴇssᴀɢᴇ ᴛᴏ ʙʀᴏᴀᴅᴄᴀsᴛ​ ʙᴀʙʏ__**")
+            await wtf.edit("Please Reply to a Message to broadcast!")
             return
         lmao = message.reply_to_message.text
-        async for dialog in Anonymous.iter_dialogs():
+        async for dialog in USER.iter_dialogs():
             try:
-                await Anonymous.send_message(dialog.chat.id, lmao)
-                sent = sent+1
-                await wtf.edit(f"`ʙʀᴏᴀᴅᴄᴀsᴛɪɴɢ...` \n\n**ʙʀᴏᴀᴅᴄᴀsᴛᴇᴅ ᴛᴏ :** `{sent}` **ᴄʜᴀᴛs** \n**ꜰᴀɪʟᴇᴅ ɪɴ :** `{failed}` **ᴄʜᴀᴛs**")
-                await asyncio.sleep(0.3)
+                await USER.send_message(dialog.chat.id, lmao)
+                sent = sent + 1
+                await wtf.edit(
+                    f"`broadcasting...` \n\n**Sent to:** `{sent}` Chats \n**Failed in:** {failed} Chats"
+                )
+                await asyncio.sleep(3)
             except:
-                failed=failed+1
-        await message.reply_text(f"**ʙʀᴏᴀᴅᴄᴀsᴛᴇᴅ sᴜᴄᴄᴇssꜰᴜʟʟʏ** \n\n**ʙʀᴏᴀᴅᴄᴀsᴛᴇᴅ ᴛᴏ :** `{sent}` **ᴄʜᴀᴛs** \n**ꜰᴀɪʟᴇᴅ ɪɴ​ :** `{failed}` **ᴄʜᴀᴛs**")
+                failed = failed + 1
+                # await wtf.edit(f"`broadcasting...` \n\n**Sent to:** `{sent}` Chats \n**Failed in:** {failed} Chats")
+
+        await message.reply_text(
+            f"`Broadcast Finished ` \n\n**Sent to:** `{sent}` Chats \n**Failed in:** {failed} Chats"
+        )

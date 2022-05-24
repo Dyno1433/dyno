@@ -1,7 +1,7 @@
 import re
 import uuid
 import socket
-
+from helpers.filters import command
 import psutil
 import platform
 from pyrogram import Client, filters
@@ -36,7 +36,7 @@ async def give_sysinfo(client, message):
     cpu_freq = psutil.cpu_freq().current
     if cpu_freq >= 1000:
         cpu_freq = f"{round(cpu_freq / 1000, 2)}ɢʜᴢ"
-    else:​
+    else:
         cpu_freq = f"{round(cpu_freq, 2)}ᴍʜᴢ"
     du = psutil.disk_usage(client.workdir)
     psutil.disk_io_counters()

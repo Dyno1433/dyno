@@ -199,8 +199,12 @@ async def play(_, message: Message):
         ACTV_CALLS.append(int(x.chat_id))
     if int(chat_id) in ACTV_CALLS:
         position = await queues.put(chat_id, file=file_path)
-        await message.reply_text(
-            text=f"**» ᴛʀᴀᴄᴋ ǫᴜᴇᴜᴇᴅ ᴀᴛ {position} ʙᴀʙʏ**\n📌 **ᴛɪᴛʟᴇ​ :**[{title[:65]}]({url})\n\n🕕** ᴅᴜʀᴀᴛɪᴏɴ :** `{duration}` **ᴍɪɴᴜᴛᴇs**\n💕** ʀᴇǫᴜᴇsᴛᴇᴅ ʙʏ​ : **{chumtiya}",
+        query = message.text.split(None, 1)[1]
+        results = YoutubeSearch(query, max_results=1).to_dict()
+        url = f"https://youtube.com{results[0]['url_suffix']}"
+        thumbnail = results[0]["thumbnails"][0]
+        await message.reply_photo(
+            photo=f"{thumbnail}",caption="» ᴛʀᴀᴄᴋ ǫᴜᴇᴜᴇᴅ ᴀᴛ {position} ʙᴀʙʏ\n📌 ᴛɪᴛʟᴇ :[{title[:65]}]({url})\n\n🕕 ᴅᴜʀᴀᴛɪᴏɴ : {duration} ᴍɪɴᴜᴛᴇs\n💕 ʀᴇǫᴜᴇsᴛᴇᴅ ʙʏ : {chumtiya}",
         reply_markup=InlineKeyboardMarkup(
             [
                 [
@@ -221,9 +225,12 @@ async def play(_, message: Message):
                 ),
                 stream_type=StreamType().local_stream,
             )
-
+        query = message.text.split(None, 1)[1]
+        results = YoutubeSearch(query, max_results=1).to_dict()
+        url = f"https://youtube.com{results[0]['url_suffix']}"
+        thumbnail = results[0]["thumbnails"][0]
         await message.reply_photo(
-            text=f"**ㅤㅤㅤ» ɴᴏᴡ ᴘʟᴀʏɪɴɢ «**\n🌹 **ᴛɪᴛʟᴇ​:** [{title[:65]}]({url})\n🥵 **ᴅᴜʀᴀᴛɪᴏɴ:** `{duration}` ᴍɪɴᴜᴛᴇs\n🥴 **ʀᴇǫᴜᴇsᴛᴇᴅ ʙʏ​:** {chumtiya}\n😌 **ᴘʟᴀʏɪɴɢ ɪɴ​:** `{message.chat.title}`\n🎥 **sᴛʀᴇᴀᴍ ᴛʏᴘᴇ:** ʏᴏᴜᴛᴜʙᴇ ᴍᴜsɪᴄ\n",
+            photo=f"{thumbnail}",caption="ㅤㅤㅤ» ɴᴏᴡ ᴘʟᴀʏɪɴɢ «\n📌 ᴛɪᴛʟᴇ : [{title[:65]}]({url})\n🕕 ᴅᴜʀᴀᴛɪᴏɴ: {duration} ᴍɪɴᴜᴛᴇs\n💕 ʀᴇǫᴜᴇsᴛᴇᴅ ʙʏ : {chumtiya}\n💔 ᴘʟᴀʏɪɴɢ ɪɴ : {message.chat.title}\n🎥 sᴛʀᴇᴀᴍ ᴛʏᴘᴇ: ʏᴏᴜᴛᴜʙᴇ ᴍᴜsɪᴄ\n",
         reply_markup=InlineKeyboardMarkup(
             [
                 [

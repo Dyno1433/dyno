@@ -55,7 +55,7 @@ async def play(_, message: Message):
 
     await message.delete()
 
-    fallen = await message.reply("» ᴘʀᴏᴄᴇssɪɴɢ​... ᴘʟᴇᴀsᴇ ᴡᴀɪᴛ ʙᴀʙʏ🔎")
+    fallen = await message.reply("» 🥵DYNO BABY COMMING")
 
     chumtiya = message.from_user.mention
 
@@ -155,9 +155,9 @@ async def play(_, message: Message):
     else:
         if len(message.command) < 2:
             return await fallen.edit(
-                "» ɢɪᴠᴇ sᴏᴍᴇ ᴛᴇxᴛ ᴛᴏ sᴇᴀʀᴄʜ ʙᴀʙʏ🤦🏻‍♂️"
+                "» WHAT IS THIS ʙᴀʙʏ🤦🏻‍♂️"
             )
-        await fallen.edit("🔎")
+        await fallen.edit("✨")
         query = message.text.split(None, 1)[1]
         # print(query)
         try:

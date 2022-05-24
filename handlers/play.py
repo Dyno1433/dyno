@@ -157,7 +157,7 @@ async def play(_, message: Message):
             return await fallen.edit(
                 "» WHAT IS THIS ʙᴀʙʏ🤦🏻‍♂️"
             )
-        await fallen.edit("✨")
+        #await fallen.edit("✨")
         query = message.text.split(None, 1)[1]
         # print(query)
         try:
@@ -213,7 +213,7 @@ async def play(_, message: Message):
                 ],
             ]
         ),
-        disable_web_page_preview=True,
+        #disable_web_page_preview=True,
     )
     else:
         await callsmusic.pytgcalls.join_group_call(
@@ -239,7 +239,7 @@ async def play(_, message: Message):
                 ],
             ]
         ),
-        disable_web_page_preview=True,
+        #disable_web_page_preview=True,
     )
 
     return await fallen.delete()

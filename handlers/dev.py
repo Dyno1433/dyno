@@ -1,5 +1,4 @@
-
-#from functools import wraps
+from functools import wraps
 import os
 import shutil
 import sys
@@ -7,7 +6,7 @@ from git import Repo
 from os import system, execle, environ
 from git.exc import InvalidGitRepositoryError
 import heroku3
-#from numpy import append
+from numpy import append
 import psutil
 from config import (
     BOT_USERNAME,

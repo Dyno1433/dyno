@@ -44,7 +44,7 @@ async def start_(client: Client, message: Message):
                         "✨ ɪɴʟɪɴᴇ ✨", switch_inline_query_current_chat=""
                     ),
                     InlineKeyboardButton(
-                        "🤯 sᴏᴜʀᴄᴇ ᴄᴏᴅᴇ​ 🤯", url="https://github.com/Dyno1433/dyno"
+                        "🤯 sᴏᴜʀᴄᴇ ᴄᴏᴅᴇ​ 🤯", url="https://telegra.ph/file/75754266e3459caf45bcc.jpg"
                     )]
             ]
        ),

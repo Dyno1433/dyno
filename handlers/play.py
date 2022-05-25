@@ -55,7 +55,7 @@ async def play(_, message: Message):
 
     await message.delete()
 
-    fallen = await message.reply("» 🥵DYNO BABY COMMING")
+    fallen = await message.reply(" 💋DYNO BABY COMMING")
 
     chumtiya = message.from_user.mention
 
@@ -182,7 +182,7 @@ async def play(_, message: Message):
 
         except Exception as e:
             await fallen.edit(
-                "» ɴᴏᴛ ғᴏᴜɴᴅ, ᴛʀʏ sᴇᴀʀᴄʜɪɴɢ ᴡɪᴛʜ ᴛʜᴇ sᴏɴɢ ɴᴀᴍᴇ ʙᴀʙʏ"
+                "» SORRY ʙᴀʙʏ"
             )
             print(str(e))
             return
@@ -204,7 +204,7 @@ async def play(_, message: Message):
         url = f"https://youtube.com{results[0]['url_suffix']}"
         thumbnail = results[0]["thumbnails"][0]
         await message.reply_photo(
-            photo=f"{thumbnail}",caption="» ᴛʀᴀᴄᴋ ǫᴜᴇᴜᴇᴅ ᴀᴛ {position} ʙᴀʙʏ\n📌 ᴛɪᴛʟᴇ :[{title[:65]}]({url})\n\n🕕 ᴅᴜʀᴀᴛɪᴏɴ : {duration} ᴍɪɴᴜᴛᴇs\n💕 ʀᴇǫᴜᴇsᴛᴇᴅ ʙʏ : {chumtiya}",
+            photo=f"{thumbnail}",caption="» WAITING MAI HAIN {position} ʙᴀʙʏ\n📌 ᴛɪᴛʟᴇ :[{title[:65]}]({url})\n\n🕕 ᴅᴜʀᴀᴛɪᴏɴ : {duration} ᴍɪɴᴜᴛᴇs\n💕 ʀᴇǫᴜᴇsᴛᴇᴅ ʙʏ : {chumtiya}",
         reply_markup=InlineKeyboardMarkup(
             [
                 [
@@ -230,7 +230,7 @@ async def play(_, message: Message):
         url = f"https://youtube.com{results[0]['url_suffix']}"
         thumbnail = results[0]["thumbnails"][0]
         await message.reply_photo(
-            photo=f"{thumbnail}",caption="ㅤㅤㅤ» ɴᴏᴡ ᴘʟᴀʏɪɴɢ «\n📌 ᴛɪᴛʟᴇ : [{title[:65]}]({url})\n🕕 ᴅᴜʀᴀᴛɪᴏɴ: {duration} ᴍɪɴᴜᴛᴇs\n💕 ʀᴇǫᴜᴇsᴛᴇᴅ ʙʏ : {chumtiya}\n💔 ᴘʟᴀʏɪɴɢ ɪɴ : {message.chat.title}\n🎥 sᴛʀᴇᴀᴍ ᴛʏᴘᴇ: ʏᴏᴜᴛᴜʙᴇ ᴍᴜsɪᴄ\n",
+            photo=f"{thumbnail}",caption="ㅤㅤㅤ» BABY ᴘʟᴀʏɪɴɢ «\n📌 ᴛɪᴛʟᴇ : [{title[:65]}]({url})\n🕕 ᴅᴜʀᴀᴛɪᴏɴ: {duration} ᴍɪɴᴜᴛᴇs\n💕 ʀᴇǫᴜᴇsᴛᴇᴅ ʙʏ : {chumtiya}\n💔 ᴘʟᴀʏɪɴɢ ɪɴ : {message.chat.title}\n🎥 sᴛʀᴇᴀᴍ ᴛʏᴘᴇ: ʏᴏᴜᴛᴜʙᴇ ᴍᴜsɪᴄ\n",
         reply_markup=InlineKeyboardMarkup(
             [
                 [

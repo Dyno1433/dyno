@@ -9,7 +9,7 @@ from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 @Client.on_message(command("start") & filters.private & ~filters.group & ~filters.edited)
 async def start_(client: Client, message: Message):
     await message.delete()
-    #await message.reply_sticker("BAADBQADqwUAAvH9kFZ2vDCG1jXDSAI")
+    #await message.reply_sticker("CAACAgUAAx0CZIiVngABAicGYo3Lo_vwD-UCH0FJDUTy-eq2dLwAAqsFAALx_ZBWdrwwhtY1w0gkBA")
     await message.reply_photo(
         photo=f"{START_IMG}",
         caption=f"""**━━━━━━━━━━━━━━━━━━

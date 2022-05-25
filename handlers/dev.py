@@ -2,10 +2,11 @@ from functools import wraps
 import os
 import shutil
 import sys
+import traceback
+from functools import wraps
+from os import environ, execle, path, remove
 from git import Repo
-from os import system, execle, environ
-from git.exc import InvalidGitRepositoryError
-import heroku3
+from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 from numpy import append
 import psutil
 from config import (

@@ -1,17 +1,21 @@
+import asyncio
 from functools import wraps
 import os
+import shlex
 import shutil
 import sys
 import traceback
 from functools import wraps
-from os import environ, execle, path, remove
+from os import environ, execle, path, remove, system
+from typing import Tuple
 from git import Repo
 from git.exc import GitCommandError, InvalidGitRepositoryError, NoSuchPathError
 from numpy import append
 import psutil
+import heroku3
 from config import (
     BOT_USERNAME,
-    
+    HEROKU_URL,
     HEROKU_API_KEY,
     HEROKU_APP_NAME,
     
@@ -19,6 +23,7 @@ from config import (
     UPSTREAM_REPO,
     OWNER_ID
 )
+from handlers.eval import edit_or_reply
 
 from helpers.decorators import sudo_users_only
 from helpers.filters import command, eor
@@ -119,8 +124,8 @@ def _check_heroku(func):
         if not heroku_client:
             await message.reply_text("`please add heroku api key to use this feature!`")
         elif not HEROKU_APP_NAME:
-            await eor(
-                message, "`please add heroku app name to use this feature!`"
+            await edit_or_reply(
+                message, text="`please add heroku app name to use this feature!`"
             )
         if HEROKU_APP_NAME and heroku_client:
             try:
@@ -147,7 +152,7 @@ async def logswen(client: Client, message: Message, happ):
 
 
 # Restart Bot
-#@Client.on_message(command("restart"))
+@Client.on_message(command("hrestart"))
 @sudo_users_only
 @_check_heroku
 async def restart(client: Client, message: Message, hap):
@@ -236,7 +241,7 @@ def updater():
     return bool(changelog)
 
 
-#@Client.on_message(command(["update", f"update@{BOT_USERNAME}"]) & ~filters.edited)
+@Client.on_message(command(["oupdate", f"oupdate@{BOT_USERNAME}"]) & ~filters.edited)
 @sudo_users_only
 async def update_bot(_, message: Message):
     chat_id = message.chat.id
@@ -312,12 +317,12 @@ async def updatebot(_, message: Message):
             ups_rem.pull(U_BRANCH)
         except GitCommandError:
             repo.git.reset("--hard", "FETCH_HEAD")
-        await runcmd("pip3 install --no-cache-dir -r requirements.txt")
-        await msg.edit("**Successfully Updated! Restarting Now!**")
-        args = [sys.executable, "main.py"]
-        execle(sys.executable, *args, environ)
+            await runcmd("pip3 install --no-cache-dir -r requirements.txt")
+            await msg.edit("**Successfully Updated! Restarting Now!**")
+            args = [sys.executable, "main.py"]
+            execle(sys.executable, *args, environ)
         exit()
-        return
+        #return
     else:
         await msg.edit("`Heroku Detected!`")
         await msg.edit("`Updating and Restarting has Started! Please wait for 5-10 Minutes!`")

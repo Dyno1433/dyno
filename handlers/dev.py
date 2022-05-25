@@ -146,7 +146,7 @@ async def logswen(client: Client, message: Message, happ):
 
 
 # Restart Bot
-@Client.on_message(command("restart"))
+#@Client.on_message(command("restart"))
 @sudo_users_only
 @_check_heroku
 async def restart(client: Client, message: Message, hap):
@@ -247,3 +247,16 @@ async def update_bot(_, message: Message):
         execle(sys.executable, sys.executable, "main.py", environ)
     
     return await msg.edit(f"❖ bot is **up-to-date** with [master]({UPSTREAM_REPO}/tree/master) ❖", disable_web_page_preview=True)
+
+
+@Client.on_message(command(["restart", f"restart@{BOT_USERNAME}"]) & ~filters.edited)
+@sudo_users_only
+async def restart_bot(_, message: Message):
+    try:
+        msg = await message.reply_text("❖ Restarting bot...")
+        print("[INFO]: BOT SERVER RESTARTED !!")
+    except BaseException as err:
+        print(f"[ERROR]: {err}")
+        return
+    await msg.edit_text("✅ Bot has restarted !\n\n» back active again in 5-10 seconds.")
+    os.system(f"kill -9 {os.getpid()} && python3 main.py")

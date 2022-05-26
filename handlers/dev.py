@@ -241,7 +241,7 @@ def updater():
     return bool(changelog)
 
 
-@Client.on_message(command(["oupdate", f"oupdate@{BOT_USERNAME}"]) & ~filters.edited)
+@Client.on_message(command(["update", f"oupdate@{BOT_USERNAME}"]) & ~filters.edited)
 @sudo_users_only
 async def update_bot(_, message: Message):
     chat_id = message.chat.id
@@ -283,7 +283,7 @@ async def runcmd(cmd: str) -> Tuple[str, str, int, int]:
 
 
 
-@Client.on_message(command("update") & filters.user(OWNER_ID))
+@Client.on_message(command("oupdate") & filters.user(OWNER_ID))
 async def updatebot(_, message: Message):
     msg = await message.reply_text("`Updating Module is Starting! Please Wait...`")
     try:

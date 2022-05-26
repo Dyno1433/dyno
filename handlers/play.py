@@ -230,7 +230,7 @@ async def play(_, message: Message):
         url = f"https://youtube.com{results[0]['url_suffix']}"
         thumbnail = results[0]["thumbnails"][0]
         await message.reply_photo(
-            photo=f"{thumbnail}",caption=f"ㅤㅤㅤ ꋊꂦꅏ ꉣ꒒ꁲꐞꂑꋊꐞ ꋰꁲꋰꐞ🥵🥵 : [{title[:65]}]({url})\n💗ᴅᴜʀᴀᴛɪᴏɴ💗: {duration} ᴍɪɴᴜᴛᴇs\n😌 ʀᴇǫᴜᴇsᴛᴇᴅ😌ʙʏ : {chumtiya}\n💋 ᴘʟᴀʏɪɴɢ ɪɴ💋 : {message.chat.title}\n🌚 sᴛʀᴇᴀᴍ ᴛʏᴘᴇ: ʏᴏᴜᴛᴜʙᴇ ᴍᴜsɪᴄ\n",
+            photo=f"{thumbnail}",caption=f"ㅤㅤㅤ ꋊꂦꅏ ꉣ꒒ꁲꐞꂑꋊꐞ ꋰꁲꋰꐞ🥵🥵\n🌹 ᴛɪᴛʟᴇ🌹 : [{title[:65]}]({url})\n💗ᴅᴜʀᴀᴛɪᴏɴ💗: {duration} ᴍɪɴᴜᴛᴇs\n😌 ʀᴇǫᴜᴇsᴛᴇᴅ😌ʙʏ : {chumtiya}\n💋 ᴘʟᴀʏɪɴɢ ɪɴ💋 : {message.chat.title}\n🌚 sᴛʀᴇᴀᴍ ᴛʏᴘᴇ: ʏᴏᴜᴛᴜʙᴇ ᴍᴜsɪᴄ\n",
         reply_markup=InlineKeyboardMarkup(
             [
                 [
